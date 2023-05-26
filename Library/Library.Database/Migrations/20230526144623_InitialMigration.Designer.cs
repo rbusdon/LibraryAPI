@@ -12,7 +12,7 @@ using RMLibrary.Database.Context;
 namespace RMLibrary.Database.Migrations
 {
     [DbContext(typeof(RMLibraryDbContext))]
-    [Migration("20230526110154_InitialMigration")]
+    [Migration("20230526144623_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -27,11 +27,11 @@ namespace RMLibrary.Database.Migrations
 
             modelBuilder.Entity("Library.Database.Models.Author", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -51,13 +51,13 @@ namespace RMLibrary.Database.Migrations
 
             modelBuilder.Entity("Library.Database.Models.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<int?>("AuthorId")
+                    b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
                     b.Property<int>("ISBN")
@@ -80,15 +80,12 @@ namespace RMLibrary.Database.Migrations
             modelBuilder.Entity("Library.Database.Models.Book", b =>
                 {
                     b.HasOne("Library.Database.Models.Author", "Author")
-                        .WithMany("Books")
-                        .HasForeignKey("AuthorId");
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("Library.Database.Models.Author", b =>
-                {
-                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

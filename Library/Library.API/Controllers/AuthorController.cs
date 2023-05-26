@@ -1,5 +1,6 @@
 ﻿using Library.Database.Models;
 using Microsoft.AspNetCore.Mvc;
+using RMLibrary.API.DTOs;
 using RMLibrary.Database.Gateways.Interfaces;
 
 namespace RMLibrary.API.Controllers
@@ -22,8 +23,8 @@ namespace RMLibrary.API.Controllers
         {
             try
             {
-                var messages = _gateway.GetAllAuthors();
-                return Ok(messages);
+                var authors = _gateway.GetAllAuthors();
+                return Ok(authors);
             }
             catch
             {
@@ -32,13 +33,37 @@ namespace RMLibrary.API.Controllers
         }
 
         [HttpGet("{id:int}"), ActionName("GetById")]
-        public Author GetById(int id) => _gateway.GetAuthorById(id)!;
+        public IActionResult GetById(int id)
+        {
+            try
+            {
+                var author = _gateway.GetAuthorById(id);
+                var authorDTO = new AuthorDTO(author.FamilyName, author.GivenName, author.DateOfBirth);
+                return Ok(authorDTO);
+            }
+            catch
+            {
+                return Problem();
+            }
+        }
 
-        [HttpPost]
-        public Author Post([FromBody] Author author) => _gateway.CreateAuthor(author);
+        [HttpPost, ActionName("Create")]
+        public IActionResult Post([FromBody] AuthorDTO authorDTO)
+        {
+            try
+            {
+                var author = new Author(null, authorDTO.GivenName, authorDTO.FamilyName, authorDTO.DateOfBirth);
+                author = _gateway.CreateAuthor(author);
+                return Ok(author);
+            }
+            catch
+            {
+                return Problem();
+            }
+        }
 
         [HttpPut("{id:int}"), ActionName("Modify")]
-        public IActionResult Edit([FromRoute] int id, [FromBody] Author updatedAuthor)
+        public IActionResult Edit([FromRoute] int id)
         {
             try
             {
@@ -47,13 +72,11 @@ namespace RMLibrary.API.Controllers
                 {
                     return BadRequest("Id is not valid");
                 }
-                existingAuthor.GivenName = updatedAuthor.GivenName;
-                existingAuthor.FamilyName = updatedAuthor.FamilyName;
-                existingAuthor.DateOfBirth = updatedAuthor.DateOfBirth;
+                var author = new Author(null, existingAuthor.GivenName, existingAuthor.FamilyName, existingAuthor.DateOfBirth);
 
                 _gateway.UpdateAuthor(existingAuthor);
 
-                return Ok(id);
+                return Ok(existingAuthor);
             }
             catch
             {
@@ -66,7 +89,7 @@ namespace RMLibrary.API.Controllers
         {
             if (_gateway.GetAuthorById(Id) is null)
             {
-                return BadRequest();
+                return BadRequest("Id is not valid");
             }
             else
             {
@@ -76,5 +99,3 @@ namespace RMLibrary.API.Controllers
         }
     }
 }
-
-//using Dtos;

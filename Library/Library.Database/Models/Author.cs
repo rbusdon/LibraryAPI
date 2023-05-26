@@ -1,11 +1,8 @@
 ﻿namespace Library.Database.Models
 {
-    public class Author
+    public record Author(int? Id = default, string GivenName = "", string FamilyName = "", DateTime DateOfBirth = default)
     {
-        public int Id { get; set; }
-        public string GivenName { get; set; } = null!;
-        public string FamilyName { get; set; } = null!;
-        public DateTime DateOfBirth { get; set; }
-        public virtual IEnumerable<Book> Books { get; set; }
+        public IEnumerable<Book> Books = new HashSet<Book>();
+        public string FullName => $"{GivenName} {FamilyName}";
     }
 }

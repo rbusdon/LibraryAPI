@@ -8,6 +8,6 @@ namespace RMLibrary.Database.Gateways.Interfaces
         Author GetAuthorById (int id);
         Author CreateAuthor (Author author);
         Author UpdateAuthor (Author author);
-        Author DeleteAuthor (int id);
+        int DeleteAuthor (int id);
     }
 }
