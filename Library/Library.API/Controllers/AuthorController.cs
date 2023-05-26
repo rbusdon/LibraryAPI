@@ -63,20 +63,13 @@ namespace RMLibrary.API.Controllers
         }
 
         [HttpPut("{id:int}"), ActionName("Modify")]
-        public IActionResult Edit([FromRoute] int id)
+        public IActionResult Edit([FromRoute] int id, AuthorDTO author)
         {
             try
             {
-                var existingAuthor = _gateway.GetAuthorById(id);
-                if (existingAuthor == null)
-                {
-                    return BadRequest("Id is not valid");
-                }
-                var author = new Author(null, existingAuthor.GivenName, existingAuthor.FamilyName, existingAuthor.DateOfBirth);
-
-                _gateway.UpdateAuthor(existingAuthor);
-
-                return Ok(existingAuthor);
+                var newAuthor = new Author(id, author.GivenName, author.FamilyName, author.DateOfBirth);
+                _gateway.UpdateAuthor(newAuthor);
+                return Ok(newAuthor);
             }
             catch
             {
@@ -84,16 +77,16 @@ namespace RMLibrary.API.Controllers
             }
         }
 
-        [HttpDelete, ActionName("Delete")]
-        public IActionResult Delete([FromBody] int Id)
+        [HttpDelete("{id:int}"), ActionName("Delete")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            if (_gateway.GetAuthorById(Id) is null)
+            if (_gateway.GetAuthorById(id) is null)
             {
                 return BadRequest("Id is not valid");
             }
             else
             {
-                _gateway.DeleteAuthor(Id);
+                _gateway.DeleteAuthor(id);
                 return StatusCode(200);
             }
         }

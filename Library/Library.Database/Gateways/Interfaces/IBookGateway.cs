@@ -11,8 +11,8 @@ namespace RMLibrary.Database.Gateways.Interfaces
     {
         IEnumerable<Book> GetAllBooks();
         Book GetBookByISBN(int ISBN);
-        IEnumerable<Book> CreateBook(List<Book> booksToAdd);
-        Book UpdateBook(int ISBN);
-        Book DeleteBook(int ISBN);
+        List<Book> CreateBook(List<Book> booksToAdd);
+        Book UpdateBook(int ISBN, Book book);
+        bool DeleteBook(int ISBN);
     }
 }

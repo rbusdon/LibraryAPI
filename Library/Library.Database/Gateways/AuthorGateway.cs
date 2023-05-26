@@ -23,18 +23,16 @@ namespace RMLibrary.Database.Gateways
 
         public Author UpdateAuthor(Author author)
         {
-            var existingAuthor = _context.Authors.Find(author.Id);
-            _context.Update(author);
+            _context.Authors.Update(author);
             _context.SaveChanges();
             return author;
         }
 
-        public int DeleteAuthor(int id)
+        public bool DeleteAuthor(int id)
         {
-            var author = _context.Authors.SingleOrDefault(a => a.Id == id);
-            _context.Remove(author);
+            _context.Remove(_context.Authors.First(a => a.Id == id));
             _context.SaveChanges();
-            return id;
+            return true;
         }
     }
 }

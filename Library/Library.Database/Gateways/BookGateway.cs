@@ -1,11 +1,7 @@
 ﻿using Library.Database.Models;
+using Microsoft.EntityFrameworkCore;
 using RMLibrary.Database.Context;
 using RMLibrary.Database.Gateways.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RMLibrary.Database.Gateways
 {
@@ -22,33 +18,36 @@ namespace RMLibrary.Database.Gateways
         public Book GetBookByISBN(int ISBN) => _context.Books.First
             (book => book.ISBN == ISBN);
 
-        public IEnumerable<Book> CreateBook(List<Book> booksToAdd)
+        public List<Book> CreateBook(List<Book> newShelf)
         {
-            throw new NotImplementedException();
-        }
-
-        public Book UpdateBook(int ISBN)
-        {
-            var existingBook = _context.Books.SingleOrDefault(b => b.ISBN == ISBN);
-            //if (existingBook != null)
-            //{
-            //    existingBook.Title = book.Title;
-            //    existingBook.Author.GivenName = author.FamilyName;
-            //    existingBook.Author.FamilyName
-            //    existingBook.Author.DateOfBirth
-            //    existingBook.Year = author.Year;
-
-            //    _context.SaveChanges();
-            //}
-            return existingBook;
-        }
-
-        public Book DeleteBook(int ISBN)
-        {
-            var book = _context.Books.SingleOrDefault(b => b.ISBN == ISBN);
-            _context.Remove(book);
+            foreach (var book in newShelf)
+            {
+                if (_context.Books.Any(p => p.ISBN == book.ISBN))
+                {
+                    throw new NotImplementedException($"Book with ISBN {book.ISBN} has been found in archive. Retry");
+                }
+            }
+            _context.Books.AddRange(newShelf);
             _context.SaveChanges();
+            return newShelf;
+        }
+
+        public Book UpdateBook(int ISBN, Book book)
+        {
+            var existingBook = _context.Books.FirstOrDefault(b => b.ISBN == ISBN);
+            if (existingBook != null)
+            {
+                _context.Books.Update(book);
+                _context.SaveChanges();
+            }
             return book;
+        }
+
+        public bool DeleteBook(int ISBN)
+        {
+            _context.Remove(_context.Books.First(b => b.ISBN == ISBN));
+            _context.SaveChanges();
+            return true;
         }
     }
 }
