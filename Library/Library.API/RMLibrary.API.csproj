@@ -19,4 +19,10 @@
     <ProjectReference Include="..\Library.Database\RMLibrary.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

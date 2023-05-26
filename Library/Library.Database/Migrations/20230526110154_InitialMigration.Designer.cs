@@ -12,7 +12,7 @@ using RMLibrary.Database.Context;
 namespace RMLibrary.Database.Migrations
 {
     [DbContext(typeof(RMLibraryDbContext))]
-    [Migration("20230526085939_InitialMigration")]
+    [Migration("20230526110154_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
