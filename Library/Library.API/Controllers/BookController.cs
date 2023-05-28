@@ -1,6 +1,5 @@
 ﻿using Library.Database.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using RMLibrary.API.DTOs;
 using RMLibrary.Database.Gateways.Interfaces;
 
@@ -21,6 +20,7 @@ namespace RMLibrary.API.Controllers
         [HttpGet("{size:int}/{page:int}"), ActionName("GetAll")]
         public IActionResult Get([FromRoute] int size, [FromRoute] int page)
         {
+            _logger.LogInformation("Using GetAllBooks");
             try
             {
                 var books = _gateway.GetAllBooks(size, page).ToList();
@@ -28,6 +28,7 @@ namespace RMLibrary.API.Controllers
             }
             catch
             {
+                _logger.LogWarning("Error occurred for GetAllBooks");
                 return Problem();
             }
         }
@@ -35,6 +36,7 @@ namespace RMLibrary.API.Controllers
         [HttpGet("{isbn:int}"), ActionName("GetByISBN")]
         public IActionResult GetByISBN([FromRoute] int isbn)
         {
+            _logger.LogInformation("Using GetBookByISBN");
             try
             {
                 var book = _gateway.GetBookByISBN(isbn);
@@ -43,6 +45,7 @@ namespace RMLibrary.API.Controllers
             }
             catch
             {
+                _logger.LogWarning("Error occurred for GetBookByISBN");
                 return Problem();
             }
         }
@@ -50,6 +53,7 @@ namespace RMLibrary.API.Controllers
         [HttpPost, ActionName("Create")]
         public IActionResult Post([FromBody] List<BookDTO> newShelfDTO)
         {
+            _logger.LogInformation("Using CreateBook");
             try
             {
                 List<Book> newShelf = new List<Book>();
@@ -68,6 +72,7 @@ namespace RMLibrary.API.Controllers
             }
             catch
             {
+                _logger.LogWarning("Error occurred for CreateBook");
                 return Problem();
             }
         }
@@ -75,6 +80,7 @@ namespace RMLibrary.API.Controllers
         [HttpPut("{isbn:int}"), ActionName("Modify")]
         public IActionResult Edit([FromRoute] int isbn, BookDTO book)
         {
+            _logger.LogInformation("Using UpdateBook");
             try
             {
                 var oldBook = _gateway.GetBookByISBN(isbn);
@@ -91,6 +97,7 @@ namespace RMLibrary.API.Controllers
             }
             catch
             {
+                _logger.LogWarning("Error occurred for UpdateBook");
                 return Problem();
             }
         }
@@ -98,6 +105,7 @@ namespace RMLibrary.API.Controllers
         [HttpDelete("{isbn:int}"), ActionName("Delete")]
         public IActionResult Delete([FromRoute] int ISBN)
         {
+            _logger.LogInformation("Using DeleteBook");
             try
             {
                 _gateway.DeleteBook(ISBN);
@@ -105,6 +113,7 @@ namespace RMLibrary.API.Controllers
             }
             catch
             {
+                _logger.LogWarning("Error occurred for DeleteBook");
                 return Problem();
             }
         }

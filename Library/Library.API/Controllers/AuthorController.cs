@@ -21,13 +21,15 @@ namespace RMLibrary.API.Controllers
         [HttpGet, ActionName("GetAll")]
         public IActionResult Get()
         {
+            _logger.LogInformation("Using GetAllAuthors");
             try
             {
-                var authors = _gateway.GetAllAuthors();
+                var authors = _gateway.GetAllAuthors().ToList();
                 return Ok(authors);
             }
             catch
             {
+                _logger.LogWarning("Error occurred for GetAllAuthors");
                 return Problem();
             }
         }
@@ -35,6 +37,7 @@ namespace RMLibrary.API.Controllers
         [HttpGet("{id:int}"), ActionName("GetById")]
         public IActionResult GetById(int id)
         {
+            _logger.LogInformation("Using GetAuthorById");
             try
             {
                 var author = _gateway.GetAuthorById(id);
@@ -43,6 +46,7 @@ namespace RMLibrary.API.Controllers
             }
             catch
             {
+                _logger.LogWarning("Error occurred for GetAuthorById");
                 return Problem();
             }
         }
@@ -50,6 +54,7 @@ namespace RMLibrary.API.Controllers
         [HttpPost, ActionName("Create")]
         public IActionResult Post([FromBody] AuthorDTO authorDTO)
         {
+            _logger.LogInformation("Using CreateAuthor");
             try
             {
                 var author = new Author(null, authorDTO.GivenName, authorDTO.FamilyName, authorDTO.DateOfBirth);
@@ -58,6 +63,7 @@ namespace RMLibrary.API.Controllers
             }
             catch
             {
+                _logger.LogWarning("Error occurred for CreateAuthor");
                 return Problem();
             }
         }
@@ -65,6 +71,7 @@ namespace RMLibrary.API.Controllers
         [HttpPut("{id:int}"), ActionName("Modify")]
         public IActionResult Edit([FromRoute] int id, AuthorDTO author)
         {
+            _logger.LogInformation("Using UpdateAuthor");
             try
             {
                 var newAuthor = new Author(id, author.GivenName, author.FamilyName, author.DateOfBirth);
@@ -73,6 +80,7 @@ namespace RMLibrary.API.Controllers
             }
             catch
             {
+                _logger.LogWarning("Error occurred for UpdateAuthor");
                 return Problem();
             }
         }
@@ -80,14 +88,20 @@ namespace RMLibrary.API.Controllers
         [HttpDelete("{id:int}"), ActionName("Delete")]
         public IActionResult Delete([FromRoute] int id)
         {
-            if (_gateway.GetAuthorById(id) is null)
+            _logger.LogInformation("Using DeleteAuthor");
+            try
             {
-                return BadRequest("Id is not valid");
-            }
-            else
-            {
+                if (_gateway.GetAuthorById(id) is null)
+                {
+                    throw new NotImplementedException();
+                }
                 _gateway.DeleteAuthor(id);
-                return StatusCode(200);
+                return Ok();
+            }
+            catch
+            {
+                _logger.LogWarning("Error occurred for DeleteAuthor");
+                return Problem();
             }
         }
     }

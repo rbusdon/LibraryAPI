@@ -9,8 +9,9 @@ namespace RMLibrary.Database.Gateways
     {
         private readonly RMLibraryDbContext _context;
         public AuthorGateway(RMLibraryDbContext context) => _context = context;
-        public IEnumerable<Author> GetAllAuthors() => _context.Authors.ToList()
-            .Where(author => author.Books.Any());
+
+        public IEnumerable<Author> GetAllAuthors() => _context.Books.Include(m => m.Author).Select(x => x.Author).Distinct();
+
         public Author GetAuthorById(int id) => _context.Authors.First
             (author => author.Id == id);
 
