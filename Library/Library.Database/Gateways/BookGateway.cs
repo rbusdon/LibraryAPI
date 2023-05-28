@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using RMLibrary.Database.Context;
 using RMLibrary.Database.Gateways.Interfaces;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace RMLibrary.Database.Gateways
 {
@@ -10,42 +12,58 @@ namespace RMLibrary.Database.Gateways
         private readonly RMLibraryDbContext _context;
         public BookGateway(RMLibraryDbContext context) => _context = context;
 
-        public IEnumerable<Book> GetAllBooks()
-        {
-            throw new NotImplementedException();
-        }
+        public List<Book> GetAllBooks(int size, int page) => new List<Book>();
+        //_context.Books.Include(a => a.Author).Skip(size * page).Take(size).ToList();
 
-        public Book GetBookByISBN(int ISBN) => _context.Books.First
+        public Book GetBookByISBN(int ISBN) => _context.Books.FirstOrDefault
             (book => book.ISBN == ISBN);
 
-        public List<Book> CreateBook(List<Book> newShelf)
+        public List<Book> CreateBook(List<Book> books)
         {
-            foreach (var book in newShelf)
+            List<Book> newShelf = new List<Book>();
+            foreach (var book in books)
             {
+                var associatedAuthor = _context.Books.FirstOrDefault(a => a.AuthorId == book.AuthorId);
+                if (associatedAuthor is not null)
+                {
+                    newShelf.Add(new Book
+                    {
+                        Id = null,
+                        Title = book.Title,
+                        Author = _context.Authors.First(b => b.Id == book.AuthorId),
+                        Year = book.Year,
+                        ISBN = book.ISBN
+                    });
+                }
                 if (_context.Books.Any(p => p.ISBN == book.ISBN))
                 {
-                    throw new NotImplementedException($"Book with ISBN {book.ISBN} has been found in archive. Retry");
+                    throw new NotImplementedException();
                 }
             }
-            _context.Books.AddRange(newShelf);
+            foreach(Book book in newShelf)
+            {
+                _context.Books.Add(book);
+            }
             _context.SaveChanges();
             return newShelf;
         }
 
         public Book UpdateBook(int ISBN, Book book)
         {
-            var existingBook = _context.Books.FirstOrDefault(b => b.ISBN == ISBN);
-            if (existingBook != null)
+            if (_context.Books.SingleOrDefault(b => b.ISBN == ISBN) is null)
             {
-                _context.Books.Update(book);
-                _context.SaveChanges();
+                throw new NotImplementedException();
             }
+            book.Author = _context.Authors.SingleOrDefault(a => a.Id == book.AuthorId);
+            _context.Books.Update(book);
+            _context.Entry(book).State = EntityState.Modified;
+            _context.SaveChanges();
             return book;
         }
 
         public bool DeleteBook(int ISBN)
         {
-            _context.Remove(_context.Books.First(b => b.ISBN == ISBN));
+            _context.Books.Remove(GetBookByISBN(ISBN));
             _context.SaveChanges();
             return true;
         }

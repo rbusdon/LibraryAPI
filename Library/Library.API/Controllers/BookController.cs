@@ -1,11 +1,7 @@
 ﻿using Library.Database.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using RMLibrary.API.DTOs;
-using RMLibrary.Database.Gateways;
 using RMLibrary.Database.Gateways.Interfaces;
-using System;
 
 namespace RMLibrary.API.Controllers
 {
@@ -22,11 +18,11 @@ namespace RMLibrary.API.Controllers
         }
 
         [HttpGet, ActionName("GetAll")]
-        public IActionResult Get()
+        public IActionResult Get([FromBody] int size, [FromBody] int page)
         {
             try
             {
-                var books = _gateway.GetAllBooks();
+                var books = _gateway.GetAllBooks(size, page).ToList();
                 return Ok(books);
             }
             catch
@@ -35,13 +31,13 @@ namespace RMLibrary.API.Controllers
             }
         }
 
-        [HttpGet("{id:int}"), ActionName("GetById")]
-        public IActionResult GetById([FromRoute] int id)
+        [HttpGet("{isbn:int}"), ActionName("GetByISBN")]
+        public IActionResult GetByISBN([FromRoute] int isbn)
         {
             try
             {
-                var book = _gateway.GetBookByISBN(id);
-                var bookDTO = new BookDTO(book.Title, book.Author, book.Year, book.ISBN);
+                var book = _gateway.GetBookByISBN(isbn);
+                var bookDTO = new BookDTO(book.Title, book.AuthorId, book.Year, book.ISBN);
                 return Ok(bookDTO);
             }
             catch
@@ -51,15 +47,20 @@ namespace RMLibrary.API.Controllers
         }
 
         [HttpPost, ActionName("Create")]
-        public IActionResult Post([FromBody] List<BookDTO> bulkOfBookDTO)
+        public IActionResult Post([FromBody] List<BookDTO> newShelfDTO)
         {
             try
             {
                 List<Book> newShelf = new List<Book>();
-                foreach (BookDTO book in bulkOfBookDTO)
+                foreach (BookDTO book in newShelfDTO)
                 {
-                    var newBook = new Book(null, book.Title, book.Year, book.ISBN);
-                    newShelf.Add(newBook);
+                    newShelf.Add(new Book
+                    {
+                        Title = book.Title,
+                        Year = book.Year,
+                        ISBN = book.ISBN,
+                        AuthorId = book.AuthorId
+                    });
                 }
                 _gateway.CreateBook(newShelf);
                 return Ok(newShelf);
@@ -71,13 +72,21 @@ namespace RMLibrary.API.Controllers
         }
 
         [HttpPut("{isbn:int}"), ActionName("Modify")]
-        public IActionResult Edit([FromRoute] int isbn, BookDTO book)
+        public IActionResult Edit([FromRoute] int isbn, [FromBody] BookDTO book)
         {
             try
             {
-                var newBook = new Book(null, book.Title, book.Year, isbn);
+                var oldBook = _gateway.GetBookByISBN(isbn);
+                var newBook = new Book
+                {
+                    Id = oldBook.Id,
+                    Title = book.Title,
+                    AuthorId = book.AuthorId,
+                    Year = book.Year,
+                    ISBN = isbn
+                };
                 _gateway.UpdateBook(isbn, newBook);
-                return Ok(newBook);
+                return Ok(book);
             }
             catch
             {
@@ -85,17 +94,17 @@ namespace RMLibrary.API.Controllers
             }
         }
 
-        [HttpDelete("{id:int}"), ActionName("Delete")]
+        [HttpDelete("{isbn:int}"), ActionName("Delete")]
         public IActionResult Delete([FromRoute] int ISBN)
         {
-            if (_gateway.GetBookByISBN(ISBN) is null)
-            {
-                return BadRequest("Id is not valid");
-            }
-            else
+            try
             {
                 _gateway.DeleteBook(ISBN);
-                return StatusCode(200);
+                return Ok();
+            }
+            catch
+            {
+                return Problem();
             }
         }
     }

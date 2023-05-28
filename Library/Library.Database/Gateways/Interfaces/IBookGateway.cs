@@ -9,7 +9,7 @@ namespace RMLibrary.Database.Gateways.Interfaces
 {
     public interface IBookGateway
     {
-        IEnumerable<Book> GetAllBooks();
+        List<Book> GetAllBooks(int size, int page);
         Book GetBookByISBN(int ISBN);
         List<Book> CreateBook(List<Book> booksToAdd);
         Book UpdateBook(int ISBN, Book book);
