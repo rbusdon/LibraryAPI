@@ -5,6 +5,7 @@ using RMLibrary.Database.Gateways.Interfaces;
 using System.ComponentModel.Design;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace RMLibrary.Database.Gateways
 {
@@ -48,16 +49,23 @@ namespace RMLibrary.Database.Gateways
 
         public Book UpdateBook(int ISBN, Book book)
         {
-            if (_context.Books.SingleOrDefault(b => b.ISBN == ISBN) is null)
+            var existingBook = _context.Books.SingleOrDefault(b => b.ISBN == ISBN);
+            if (existingBook is null)
             {
                 throw new NotImplementedException();
             }
+
+            _context.Entry(existingBook).State = EntityState.Detached;
             book.Author = _context.Authors.SingleOrDefault(a => a.Id == book.AuthorId);
             _context.Books.Update(book);
-            _context.Entry(book).State = EntityState.Modified;
             _context.SaveChanges();
-            return book;
+
+            var updatedBook = _context.Books.Include(p => p.Author)
+                .First(p => p.ISBN == book.ISBN);
+
+            return updatedBook;
         }
+
 
         public bool DeleteBook(int ISBN)
         {

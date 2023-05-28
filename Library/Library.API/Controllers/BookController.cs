@@ -63,8 +63,6 @@ namespace RMLibrary.API.Controllers
                         ISBN = book.ISBN
                     });
                 }
-                //_gateway.CreateBook(newShelf);
-                //return Ok(newShelf);
                 List<Book> newBooks = _gateway.CreateBook(newShelf);
                 return Ok(newBooks);
             }
@@ -75,7 +73,7 @@ namespace RMLibrary.API.Controllers
         }
 
         [HttpPut("{isbn:int}"), ActionName("Modify")]
-        public IActionResult Edit([FromRoute] int isbn, [FromBody] BookDTO book)
+        public IActionResult Edit([FromRoute] int isbn, BookDTO book)
         {
             try
             {
@@ -88,8 +86,8 @@ namespace RMLibrary.API.Controllers
                     Year = book.Year,
                     ISBN = isbn
                 };
-                _gateway.UpdateBook(isbn, newBook);
-                return Ok(book);
+                newBook = _gateway.UpdateBook(isbn, newBook);
+                return Ok(newBook);
             }
             catch
             {
