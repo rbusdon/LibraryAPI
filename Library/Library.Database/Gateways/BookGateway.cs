@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RMLibrary.Database.Context;
 using RMLibrary.Database.Gateways.Interfaces;
+using System.ComponentModel.Design;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -22,28 +23,26 @@ namespace RMLibrary.Database.Gateways
             List<Book> newShelf = new List<Book>();
             foreach (var book in books)
             {
-                var associatedAuthor = _context.Books.FirstOrDefault(a => a.AuthorId == book.AuthorId);
-                if (associatedAuthor is not null)
+                if (_context.Authors.Any(p => p.Id == book.AuthorId))
                 {
-                    newShelf.Add(new Book
+                    if (_context.Books.Any(p => p.ISBN == book.ISBN))
                     {
-                        Id = null,
+                        throw new NotImplementedException();
+                    }
+                    var newBook = new Book
+                    {
                         Title = book.Title,
-                        Author = _context.Authors.First(b => b.Id == book.AuthorId),
+                        AuthorId = book.AuthorId,
+                        Author = _context.Authors.First(p => p.Id == book.AuthorId),
                         Year = book.Year,
                         ISBN = book.ISBN
-                    });
-                }
-                if (_context.Books.Any(p => p.ISBN == book.ISBN))
-                {
-                    throw new NotImplementedException();
+                    };
+                    newShelf.Add (newBook);
                 }
             }
-            foreach(Book book in newShelf)
-            {
-                _context.Books.Add(book);
-            }
+            _context.Books.AddRange(newShelf);
             _context.SaveChanges();
+            newShelf = _context.Books.Include(p => p.Author).AsEnumerable().Where(p => books.Any(g => g.ISBN == p.ISBN)).ToList();
             return newShelf;
         }
 

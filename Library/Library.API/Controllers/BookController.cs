@@ -1,5 +1,6 @@
 ﻿using Library.Database.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RMLibrary.API.DTOs;
 using RMLibrary.Database.Gateways.Interfaces;
 
@@ -57,13 +58,15 @@ namespace RMLibrary.API.Controllers
                     newShelf.Add(new Book
                     {
                         Title = book.Title,
+                        AuthorId = book.AuthorId,
                         Year = book.Year,
-                        ISBN = book.ISBN,
-                        AuthorId = book.AuthorId
+                        ISBN = book.ISBN
                     });
                 }
-                _gateway.CreateBook(newShelf);
-                return Ok(newShelf);
+                //_gateway.CreateBook(newShelf);
+                //return Ok(newShelf);
+                List<Book> newBooks = _gateway.CreateBook(newShelf);
+                return Ok(newBooks);
             }
             catch
             {
