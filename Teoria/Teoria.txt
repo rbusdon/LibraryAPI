@@ -1,0 +1,16 @@
+1. Le 3 Principali tecnologie che Compongono il Web sono: 
+ - URL, per esteso Uniform Resource Locator. URL è un codice univoco che identifica lo spazio virtuale ove il quale è possibile trovare una risorsa;
+ - HTTP, per esteso Hypertext Transfer Protocol. HTTP è un protocollo utilizzato sul web per la trasmissione di informazioni tra il client ed il server;
+ - HTML, per esteso Hypertext Markup Languag. HTML è un linguaggio di Markup utilizzato per la formattazione e strutturazione delle pagine web.
+
+2. Risorsa è un oggetto rappresentato da un URL. Un URL è un codice che identifica univocamente una risorsa sul web hostata da un server e messa a disposizione del client. 
+La rappresentazione di una risorsa è l'oggetto che il client ottiene quando cerca di accedere alla risorsa, poichè il client non vi accede mai direttamente.
+
+3. HATEOAS è una sigla che sta per Hypermedia as the Engine of Application State. E' Un principio che guida il design delle API, secondo il modello RESTful. Il principio HATEOAS suggerisce che  una web API non dovrebbe includere solamente i dati al suo interno, ma anche i collegamenti tra le verie risorse disponibili per il client, permettendo una navigazione al client tra le verie risorse disponibili.
+
+4. Verbo HTTP, URL, Header e Body (della richiesta) sono le parti che compongono le richieste HTTP. Un verbo HTTP è un metodo che definisce un'azione da effettuare su una specifica risorsa. URL è un codice univoco che identifica lo spazio virtuale ove il quale è possibile trovare una risorsa. L'header è una serie di valori chiave che descrivono il corpo dell'entità e la risposta HTTP. Il corpo della richiesta è una parte opzionale della richiesta HTTP che trasmette dati al server.
+Status Code, Header e Body (della risposta) invece sono le parti che compongono le risposte HTTP. Lo status code è un codice univoco che identifica lo stato della risposta: le risposte che iniziano con 100 sono risposte di tipo informativo, 200 sono le risposte di successo, 300 di reindirizzamento, 400 le risposte di errore del client e 500 le risposte di errore del server. Header e Body della risposta non differiscono in funzionalità dagli stessi nella richiesta, salvo per un cambio di contenuto.
+
+5. Sia MVC che API si trovano nell'ambito delle applicazioni WEB. 
+MVC è un pattern strutturato per dividere la logica del software tra i suoi componenti che sono il model, la view e il controller, come il nome suggerisce. Il modello generalmente rappresenta i dati e la business logica, la vista gestisce le interazioni con l'utente e prende le informazioni dal modello, il controller funziona da intermediario tra il modello e la vista, ricevendo in unput dall'utente e manipolando i dati. MVC utilizza chiamate HTTP tra client e server.
+API è un set di procedure utilizzato per gestire la comunicazione e l'interazione tra applicazioni. API facilitano lo scambio e la manipolazione dei dati. Tramite un API, il client interagisce con il server utilizzando API endpoints, tramite formati strutturati come i JSON. Il server processa le richieste tramite gli endpoint ed effettua le azioni necessarie inviando, quindi la risposta.

@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "669ac42a-e45b-474c-a961-5d909bb114f3",
+		"name": "Authors",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27631147"
+	},
+	"item": [
+		{
+			"name": "GetAllAuthors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body has the expected structure\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    jsonData.forEach(function(item) {\r",
+							"        pm.expect(item).to.have.property(\"id\").that.is.a(\"number\");\r",
+							"        pm.expect(item).to.have.property(\"givenName\").that.is.a(\"string\");\r",
+							"        pm.expect(item).to.have.property(\"familyName\").that.is.a(\"string\");\r",
+							"        pm.expect(item).to.have.property(\"dateOfBirth\").that.is.a(\"string\");\r",
+							"        pm.expect(item).to.have.property(\"fullName\").that.is.a(\"string\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/Author/GetAll",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Author",
+						"GetAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAuthorById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate response body\", function () {\r",
+							"  var responseBody = pm.response.json();\r",
+							"\r",
+							"  pm.expect(responseBody.givenName).to.be.a('string');\r",
+							"\r",
+							"  pm.expect(responseBody.familyName).to.be.a('string');\r",
+							"\r",
+							"  pm.expect(responseBody.dateOfBirth).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/Author/GetById/13",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Author",
+						"GetById",
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateAuthor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate response body\", function () {\r",
+							"  // Parse the response body as a JSON object\r",
+							"  var responseBody = pm.response.json();\r",
+							"\r",
+							"  // Validate the 'id' field as a number\r",
+							"  pm.expect(responseBody.id).to.be.a('number');\r",
+							"\r",
+							"  // Validate the 'givenName' field as a string\r",
+							"  pm.expect(responseBody.givenName).to.be.a('string');\r",
+							"\r",
+							"  // Validate the 'familyName' field as a string\r",
+							"  pm.expect(responseBody.familyName).to.be.a('string');\r",
+							"\r",
+							"  // Validate the 'dateOfBirth' field as a string representing a date\r",
+							"  pm.expect(responseBody.dateOfBirth).to.be.a('string');\r",
+							"\r",
+							"  // Validate the 'fullName' field as a string\r",
+							"  pm.expect(responseBody.fullName).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"givenName\": \"Rocco\",\r\n  \"familyName\": \"string\",\r\n  \"dateOfBirth\": \"2023-05-26\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Author/Create",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Author",
+						"Create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateAuthor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate response body\", function () {\r",
+							"  // Parse the response body as a JSON object\r",
+							"  var responseBody = pm.response.json();\r",
+							"\r",
+							"  // Validate the 'id' field as a number\r",
+							"  pm.expect(responseBody.id).to.be.a('number');\r",
+							"\r",
+							"  // Validate the 'givenName' field as a string\r",
+							"  pm.expect(responseBody.givenName).to.be.a('string');\r",
+							"\r",
+							"  // Validate the 'familyName' field as a string\r",
+							"  pm.expect(responseBody.familyName).to.be.a('string');\r",
+							"\r",
+							"  // Validate the 'dateOfBirth' field as a string representing a date\r",
+							"  pm.expect(responseBody.dateOfBirth).to.be.a('string');\r",
+							"\r",
+							"  // Validate the 'fullName' field as a string\r",
+							"  pm.expect(responseBody.fullName).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"givenName\": \"Rocco\",\r\n  \"familyName\": \"Rocco\",\r\n  \"dateOfBirth\": \"2023-05-24\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Author/Modify/18",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Author",
+						"Modify",
+						"18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAuthor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/Author/Delete/12",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Author",
+						"Delete",
+						"12"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

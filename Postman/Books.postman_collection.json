@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "687b10b4-ffef-4150-877b-34bda9187f58",
+		"name": "Books",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27631147"
+	},
+	"item": [
+		{
+			"name": "GetAllBooks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body has the expected structure\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    jsonData.forEach(function(item) {\r",
+							"        pm.expect(item).to.have.property(\"id\").that.is.a(\"number\");\r",
+							"        pm.expect(item).to.have.property(\"title\").that.is.a(\"string\");\r",
+							"        pm.expect(item).to.have.property(\"year\").that.is.a(\"number\");\r",
+							"        pm.expect(item).to.have.property(\"isbn\").that.is.a(\"number\");\r",
+							"        pm.expect(item).to.have.property(\"authorId\").that.is.a(\"number\");\r",
+							"        pm.expect(item).to.have.property(\"author\").that.is.an('object');\r",
+							"        pm.expect(item.author).to.have.property(\"id\").that.is.a(\"number\");\r",
+							"        pm.expect(item.author).to.have.property(\"givenName\").that.is.a(\"string\");\r",
+							"        pm.expect(item.author).to.have.property(\"familyName\").that.is.a(\"string\");\r",
+							"        pm.expect(item.author).to.have.property(\"dateOfBirth\").that.is.a(\"string\");\r",
+							"        pm.expect(item.author).to.have.property(\"fullName\").that.is.a(\"string\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/Book/GetAll/2/2",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Book",
+						"GetAll",
+						"2",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBookByISBN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate response body\", function () {\r",
+							"  var responseBody = pm.response.json();\r",
+							"\r",
+							"  pm.expect(responseBody.title).to.be.a('string');\r",
+							"\r",
+							"  pm.expect(responseBody.authorId).to.be.a('number');\r",
+							"\r",
+							"  pm.expect(responseBody.year).to.be.a('number');\r",
+							"\r",
+							"  pm.expect(responseBody.isbn).to.be.a('number');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/Book/GetByISBN/123456789",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Book",
+						"GetByISBN",
+						"123456789"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body has the expected structure\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    jsonData.forEach(function(item) {\r",
+							"        pm.expect(item).to.have.property(\"id\").that.is.a(\"number\");\r",
+							"        pm.expect(item).to.have.property(\"title\").that.is.a(\"string\");\r",
+							"        pm.expect(item).to.have.property(\"year\").that.is.a(\"number\");\r",
+							"        pm.expect(item).to.have.property(\"isbn\").that.is.a(\"number\");\r",
+							"        pm.expect(item).to.have.property(\"authorId\").that.is.a(\"number\");\r",
+							"        pm.expect(item).to.have.property(\"author\").that.is.an('object');\r",
+							"        pm.expect(item.author).to.have.property(\"id\").that.is.a(\"number\");\r",
+							"        pm.expect(item.author).to.have.property(\"givenName\").that.is.a(\"string\");\r",
+							"        pm.expect(item.author).to.have.property(\"familyName\").that.is.a(\"string\");\r",
+							"        pm.expect(item.author).to.have.property(\"dateOfBirth\").that.is.a(\"string\");\r",
+							"        pm.expect(item.author).to.have.property(\"fullName\").that.is.a(\"string\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"title\": \"Luffy\",\r\n    \"authorId\": 19,\r\n    \"year\": 34,\r\n    \"isbn\": 1240\r\n  },\r\n  {\r\n    \"title\": \"JoyBoy\",\r\n    \"authorId\": 8,\r\n    \"year\": 34,\r\n    \"isbn\": 1270\r\n  }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Book/Create",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Book",
+						"Create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"function validateItem(item) {\r",
+							"    pm.expect(item).to.have.property(\"id\").that.is.a(\"number\");\r",
+							"    pm.expect(item).to.have.property(\"title\").that.is.a(\"string\");\r",
+							"    pm.expect(item).to.have.property(\"year\").that.is.a(\"number\");\r",
+							"    pm.expect(item).to.have.property(\"isbn\").that.is.a(\"number\");\r",
+							"    pm.expect(item).to.have.property(\"authorId\").that.is.a(\"number\");\r",
+							"    pm.expect(item).to.have.property(\"author\").that.is.an('object');\r",
+							"    pm.expect(item.author).to.have.property(\"id\").that.is.a(\"number\");\r",
+							"    pm.expect(item.author).to.have.property(\"givenName\").that.is.a(\"string\");\r",
+							"    pm.expect(item.author).to.have.property(\"familyName\").that.is.a(\"string\");\r",
+							"    pm.expect(item.author).to.have.property(\"dateOfBirth\").that.is.a(\"string\");\r",
+							"    pm.expect(item.author).to.have.property(\"fullName\").that.is.a(\"string\");\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"All You Need Is Kill\",\r\n  \"authorId\": 8,\r\n  \"year\": 666,\r\n  \"isbn\": 123456\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/Book/Modify/123456",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Book",
+						"Modify",
+						"123456"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response body and status code\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/Book/Delete/1259",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"Book",
+						"Delete",
+						"1259"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
