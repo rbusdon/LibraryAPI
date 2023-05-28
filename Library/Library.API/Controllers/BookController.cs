@@ -17,8 +17,8 @@ namespace RMLibrary.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet, ActionName("GetAll")]
-        public IActionResult Get([FromBody] int size, [FromBody] int page)
+        [HttpGet("{size:int}/{page:int}"), ActionName("GetAll")]
+        public IActionResult Get([FromRoute] int size, [FromRoute] int page)
         {
             try
             {

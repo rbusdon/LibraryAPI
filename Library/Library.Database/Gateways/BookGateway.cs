@@ -12,8 +12,7 @@ namespace RMLibrary.Database.Gateways
         private readonly RMLibraryDbContext _context;
         public BookGateway(RMLibraryDbContext context) => _context = context;
 
-        public List<Book> GetAllBooks(int size, int page) => new List<Book>();
-        //_context.Books.Include(a => a.Author).Skip(size * page).Take(size).ToList();
+        public List<Book> GetAllBooks(int size, int page) => _context.Books.Include(a => a.Author).Skip(size * page).Take(size).ToList();
 
         public Book GetBookByISBN(int ISBN) => _context.Books.FirstOrDefault
             (book => book.ISBN == ISBN);
